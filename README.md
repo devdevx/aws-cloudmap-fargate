@@ -4,7 +4,7 @@ This project uses terraform to launch an http api gateway and connects it to Far
 
 ## Architecture
 
-![Diagram](./architecture/diagram.png)
+![Diagram](architecture/diagram.png)
 
 ## Create the image and upload it
 
