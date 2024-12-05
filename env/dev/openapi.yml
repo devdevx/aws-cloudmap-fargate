@@ -1,0 +1,46 @@
+openapi: 3.0.1
+info:
+  title: HTTP api gateway
+  description: Demo http api
+  version: 1.0.0
+paths:
+  /api-proxy/v1/{proxy+}:
+    get:
+      responses:
+        default:
+          description: "Default response"
+      x-amazon-apigateway-integration:
+        payloadFormatVersion: "1.0"
+        type: "http_proxy"
+        httpMethod: "ANY"
+        uri: "${api_proxy}/{proxy}"
+        connectionType: "INTERNET"
+    parameters:
+    - name: "proxy+"
+      in: "path"
+      description: "Parameter for proxy+"
+      required: true
+      schema:
+        type: "string"
+  /api-service/v1/{proxy+}:
+    get:
+      responses:
+        default:
+          description: "Default response"
+      x-amazon-apigateway-integration:
+        requestParameters:
+          overwrite:path: "$request.path.proxy" # Required to only pas the proxy path part to the backend instead of all path
+        payloadFormatVersion: "1.0"
+        connectionId: "${vpc_link_id}"
+        type: "http_proxy"
+        httpMethod: "ANY"
+        uri: "${service_discovery_arns.ecs_sds_app}"
+        connectionType: "VPC_LINK"
+    parameters:
+    - name: "proxy+"
+      in: "path"
+      description: "Parameter for proxy+"
+      required: true
+      schema:
+        type: "string"
+x-amazon-apigateway-importexport-version: "1.0"
